@@ -1,0 +1,106 @@
+
+kubectl run my-pod --image=nginx:1.14.2 --port=80
+kubectl get pods
+kubectl describe pod my-pod
+kubectl delete pod my-pod
+kubectl exec my-pod -- ls /
+kubectl logs my-pod
+kubectl edit pod my-pod
+kubectl run my-pod --image=busybox --attach --restart=Never -- echo "Hello, Kubernetes!"
+kubectl run my-pod --image=nginx --env="APP_COLOR=blue" --env="APP_MODE=prod"
+kubectl run my-pod --image=nginx --limits="cpu=500m,memory=256Mi" --requests="cpu=200m,memory=128Mi"
+
+kubectl create deployment my-deployment --image=nginx:1.14.2 --replicas=3
+kubectl get deployments
+kubectl describe deployment my-deployment
+kubectl scale deployment my-deployment --replicas=5
+kubectl set image deployment/my-deployment nginx=nginx:1.16.1
+kubectl rollout undo deployment/my-deployment
+kubectl rollout status deployment/my-deployment
+kubectl rollout pause deployment/my-deployment
+kubectl rollout resume deployment/my-deployment
+kubectl delete deployment my-deployment
+
+
+kubectl create service clusterip my-service --tcp=80:8080
+kubectl create service nodeport my-nodeport-service --tcp=80:8080 --node-port=30000
+kubectl create service loadbalancer my-lb-service --tcp=80:8080
+kubectl expose deployment my-deployment --port=80 --target-port=8080 --type=ClusterIP
+kubectl get services
+kubectl describe service my-service
+kubectl delete service my-service
+kubectl edit service my-service
+kubectl patch service my-service -p '{"spec":{"type":"LoadBalancer"}}'
+
+
+
+kubectl create configmap my-config --from-literal=APP_COLOR=blue --from-literal=APP_MODE=prod
+kubectl create configmap my-config --from-file=config.properties
+kubectl get configmaps
+kubectl describe configmap my-config
+kubectl delete configmap my-config
+kubectl edit configmap my-config
+
+kubectl create secret generic my-secret --from-literal=username=admin --from-literal=password=secret
+kubectl create secret generic my-secret --from-file=secret.properties
+kubectl create secret tls my-tls-secret --cert=path/to/tls.crt --key=path/to/tls.key
+kubectl get secrets
+kubectl describe secret my-secret
+kubectl delete secret my-secret
+kubectl edit secret my-secret
+
+
+kubectl create pv my-pv --type=hostPath --path=/mnt/data --capacity=1Gi --access-mode=ReadWriteOnce
+kubectl get pv
+kubectl describe pv my-pv
+kubectl delete pv my-pv
+kubectl edit pv my-pv
+
+
+kubectl create pvc my-pvc --storage-class=standard --access-mode=ReadWriteOnce --request-storage=500Mi
+kubectl get pvc
+kubectl describe pvc my-pvc
+kubectl delete pvc my-pvc
+kubectl edit pvc my-pvc
+
+kubectl create job my-job --image=busybox -- echo "Hello, Kubernetes!"
+kubectl get jobs
+kubectl describe job my-job
+kubectl delete job my-job
+kubectl edit job my-job
+
+
+kubectl create cronjob my-cronjob --image=busybox --schedule="*/1 * * * *" -- echo "Hello from CronJob!"
+kubectl get cronjobs
+kubectl describe cronjob my-cronjob
+kubectl delete cronjob my-cronjob
+kubectl edit cronjob my-cronjob
+
+kubectl create statefulset my-statefulset --image=nginx --replicas=3
+kubectl get statefulsets
+kubectl describe statefulset my-statefulset
+kubectl delete statefulset my-statefulset
+kubectl edit statefulset my-statefulset
+
+kubectl create ingress my-ingress --rule="my-domain.com/*=my-service:80"
+kubectl get ingress
+kubectl describe ingress my-ingress
+kubectl delete ingress my-ingress
+kubectl create networkpolicy my-networkpolicy --pod-selector="app=frontend" --ingress="from=[{podSelector:{matchLabels:{app=backend}}}]"
+
+kubectl taint nodes <node-name> key=value:NoSchedule
+kubectl taint nodes <node-name> key=value:NoSchedule-
+kubectl describe node <node-name> | grep Taints
+kubectl run my-pod --image=nginx --overrides='{"spec":{"tolerations":[{"key":"key","operator":"Equal","value":"value","effect":"NoSchedule"}]}}'
+kubectl taint nodes <node-name> key=value:NoExecute
+
+kubectl create clusterrole my-clusterrole --verb=get,list,watch --resource=pods
+kubectl get clusterroles
+kubectl describe clusterrole my-clusterrole
+kubectl delete clusterrole my-clusterrole
+kubectl create clusterrolebinding my-clusterrolebinding --clusterrole=my-clusterrole --user=my-user
+kubectl get clusterrolebindings
+kubectl describe clusterrolebinding my-clusterrolebinding
+kubectl delete clusterrolebinding my-clusterrolebinding
+
+
